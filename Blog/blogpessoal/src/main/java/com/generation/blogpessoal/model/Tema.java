@@ -30,6 +30,8 @@ private String descricao;
 private List<Postagem> postagem;
 	
 	
+//getter e setter
+
 	public long getId() {
 		return id;
 	}
