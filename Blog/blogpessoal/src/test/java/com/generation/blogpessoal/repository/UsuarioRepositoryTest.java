@@ -33,7 +33,7 @@ class UsuarioRepositoryTest {
 		
 		repository.save(new Usuario(0L, "Dois Nome", "NomeNome@gmail.com", "23451", "https://i.imgur.com/fhintxd.jpeg"));
 
-		repository.save(new Usuario(0L, "Noem Três", "3Noem3@gmail.com", "34512", "https://i.imgur.com/fhintxd.jpeg"));
+		repository.save(new Usuario(0L, "Nome Três", "3Nome3@gmail.com", "34512", "https://i.imgur.com/fhintxd.jpeg"));
 
 		repository.save(new Usuario(0L, "Nemo Quatro", "QuaNemoTro@gmail.com", "45123", "https://i.imgur.com/fhintxd.jpeg"));
 
@@ -53,11 +53,11 @@ class UsuarioRepositoryTest {
 	@DisplayName("Retorna 3 usuarios")
 	public void retornaTresUsuarios() {
 		
-		List<Usuario> listaDeUsuarios = repository.findAllByNomeContainingIgnoreCase("Silva");
+		List<Usuario> listaDeUsuarios = repository.findAllByNomeContainingIgnoreCase("Nome");
 		assertEquals(3, listaDeUsuarios.size());
 		assertTrue(listaDeUsuarios.get(0).getNome().equals("Nome Um"));
 		assertTrue(listaDeUsuarios.get(1).getNome().equals("Dois Nome"));
-		assertTrue(listaDeUsuarios.get(2).getNome().equals("Noem Três"));
+		assertTrue(listaDeUsuarios.get(2).getNome().equals("Nome Três"));
 		
 	}
 	
