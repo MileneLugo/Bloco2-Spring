@@ -14,8 +14,9 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 @Entity
-@Table(name="tb_usuarios")
+@Table (name="tb_usuarios")
 public class Usuario {
 	
 	@Id
@@ -24,20 +25,35 @@ public class Usuario {
 	
 	private String nome;
 	
-	@NotNull
-	@Email(message = "O email deve ser valido!")
+	@NotNull 
+	@Email(message = "Inserir um email válido! Exemplo: nomeaqui@emailaqui.com")
 	private String usuario;
 	
 	@NotNull
+	//Caracteres especiais podem causar erro
 	private String senha;
 	
 	private String foto;
-	
+
+	//Estabelece a relação entre as tabelas (postagem)
 	@OneToMany(mappedBy = "usuario" , cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("usuario")
 	private List<Postagem> postagem;
+	
+	//Metodos construtores para testes: deve seguir a mesma ordem das declarações acima
+	//Inserir todos os atributos para testar (construtor cheio)
+	public Usuario(Long id, String nome, String usuario, String senha, String foto) {
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		this.foto = foto;
+	}
+	
+	//Inserir o necessário (construtor vazio)
+	public Usuario() {}
 
-	//getter e setter
+	//Getter e setter
 	
 	public Long getId() {
 		return id;
@@ -86,7 +102,11 @@ public class Usuario {
 	public void setPostagem(List<Postagem> postagem) {
 		this.postagem = postagem;
 	}
-
 	
+	
+
 }
+
+
+
 

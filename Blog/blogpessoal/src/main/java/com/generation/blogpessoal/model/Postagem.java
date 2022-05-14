@@ -1,50 +1,64 @@
 package com.generation.blogpessoal.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-//transforma objeto em tabela
+//Transforma objeto em tabela
 @Entity
-
-//da o nome a tabela
+//Da o nome para a tabela
 @Table(name= "tb_postagem")
 public class Postagem {
 	
-	//define coluna como chave primaria
+	//Define coluna como chave primaria
 	@Id
-	//equivale ao auto_increment 
+	//Equivale ao auto_increment 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 	
-	//campo deve ser preenchido
+	//Define que o campo deve ser preenchido
 	@NotNull
-	
-	//minimo e maximo de caracteres
-	@Size(min = 5, max = 100, message="O campo deve ter no minimo 5 caracteres e no maximo 100.")
+	//Define o minimo e o maximo de caracteres, além de uma mensagem
+	@Size(min = 5, max = 100, message="O campo deve ter de 5 a 100 caracteres")
 	public String titulo;
 	
-	@NotNull 
+	@NotNull
 	public String texto;
 	
-	//relação entre tabelas
-	@ManyToOne
-	@JsonIgnoreProperties("postagem")
-	private Tema tema;
-	
+	//Estabelece a relação entre as tabelas (usuario)
 	@ManyToOne
 	@JsonIgnoreProperties("postagem")
 	private Usuario usuario;
-
-	//getter e setter
 	
+	//Estabele a relação entre as tabelas (tema)
+	@ManyToOne
+	@JsonIgnoreProperties("postagem")
+	private Tema tema;
+
+	@Temporal (TemporalType.TIMESTAMP)
+	public Date data = new java.sql.Date(System.currentTimeMillis());
+
+	//Getter e setter
+	
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -64,7 +78,7 @@ public class Postagem {
 	public String getTexto() {
 		return texto;
 	}
-	
+
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}
@@ -85,6 +99,6 @@ public class Postagem {
 		this.usuario = usuario;
 	}
 	
-	
-	
 }
+
+

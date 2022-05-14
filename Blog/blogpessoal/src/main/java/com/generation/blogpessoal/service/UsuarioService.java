@@ -17,53 +17,71 @@ public class UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository repository;
-
-	public Optional cadastraUsuario(Usuario usuario) {
-
-		if (repository.findByUsuario(usuario.getUsuario()).isPresent())
+	//Cadastra o usuario
+	public Optional<Usuario>cadastraUsuario(Usuario usuario){
+		//Se o usuario já existe no banco de dados
+		if(repository.findByUsuario(usuario.getUsuario()).isPresent())
 			return Optional.empty();
-		
-		usuario.setSenha(criptografarSenha(usuario.getSenha()));
-
-		return Optional.of(repository.save(usuario));
+	
+			//Criptografa a senha 
+			usuario.setSenha(criptografarSenha(usuario.getSenha()));
+			
+			//Salva o usuario e senha criptografada
+			return Optional.of(repository.save(usuario));
 	}
-
+	
+	//Criptografa a senha digitada
 	private String criptografarSenha(String senha) {
-		
+
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		return encoder.encode(senha);
-	}
-	
-	public Optional <UsuarioLogin> autenticaUsuario(Optional <UsuarioLogin> usuarioLogin) {
-		Optional <Usuario> usuario = repository.findByUsuario(usuarioLogin.get().getUsuario());
-		
+	};
+	public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
+       Optional<Usuario> usuario = repository.findByUsuario(usuarioLogin.get().getUsuario());
+
 		if (usuario.isPresent()) {
-			if(compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())) {
-				usuarioLogin.get().setId(usuario.get().getId()); 
-				usuarioLogin.get().setNome(usuario.get().getNome());             
+			if (compararSenhas(usuarioLogin.get().getSenha(), usuario.get().getSenha())) {
+
+				usuarioLogin.get().setId(usuario.get().getId());
+				usuarioLogin.get().setNome(usuario.get().getNome());
 				usuarioLogin.get().setFoto(usuario.get().getFoto());
 				usuarioLogin.get().setToken(gerarBasicToken(usuarioLogin.get().getUsuario(), usuarioLogin.get().getSenha()));
 				usuarioLogin.get().setSenha(usuario.get().getSenha());
-				
+
 				return usuarioLogin;
+
 			}
-		}
-		return Optional.empty(); 
+		}	
+		
+		return Optional.empty();
+		
 	}
 	
-	private boolean compararSenhas(String senhaDigitada, String senhaBanco) {	
+		//Se senha digitada é a mesma do banco de dados
+       private boolean compararSenhas(String senhaDigitada, String senhaBanco) {
+		
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
 		return encoder.matches(senhaDigitada, senhaBanco);
+
 	}
+       
+       //Gera Token
+       private String gerarBasicToken(String usuario, String senha) {
+
+    	//Token   
+   		String token = usuario + ":" + senha;
+   		byte[] tokenBase64 = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII")));
+   		
+   		//Cria TOken
+   		return "Basic " + new String(tokenBase64);
+
+   	}
+
+
 	
-	private String gerarBasicToken(String usuario, String senha) {
-
-		String token = usuario + ":" + senha;  
-		byte[] tokenBase64 = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII")));
-
-		
-		return "Basic " + new String(tokenBase64);
-	}
 }
+
+
+

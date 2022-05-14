@@ -1,5 +1,5 @@
 package com.generation.blogpessoal.security;
-
+//implementa o user detailsimplt 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	
 		usuario.orElseThrow(()-> new UsernameNotFoundException(userName + "Usuario não encontrado"));
 		
+		//Atribui o resultado encontrado no optional para alimentar o UserDetailsImpl
 		return usuario.map(UserDetailsImpl::new).get();
 	}
 

@@ -14,29 +14,27 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "tb_tema")
+@Table(name= "tb_tema")
 public class Tema {
+	
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Long id;
+    
+    @NotNull
+    public String descricao;
+    
+    //Estabelece a relação entre as tabelas (postagem)
+    @OneToMany(mappedBy="tema", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("tema")
+    private List <Postagem> postagem;
 
-@Id	
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private long id;
-	
-@NotNull
-private String descricao;
-	
-//relação entre tabelas
-@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)
-@JsonIgnoreProperties("tema")
-private List<Postagem> postagem;
-	
-	
-//getter e setter
-
-	public long getId() {
+    //Getter e setter
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -55,5 +53,6 @@ private List<Postagem> postagem;
 	public void setPostagem(List<Postagem> postagem) {
 		this.postagem = postagem;
 	}
-	
+    
+    
 }

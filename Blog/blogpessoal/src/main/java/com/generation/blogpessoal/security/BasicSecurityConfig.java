@@ -12,36 +12,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-	//notação de scurity
-	@EnableWebSecurity
-	public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
+//Notação do Secutiry
+@EnableWebSecurity
+public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	//serve para comparar os dados digitados com os dados salvos no banco de dados
+	//Serve para comparar os dados digitados com os dados salvos no banco de dados
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
-	@Override
+	//Usuario em memoria (TESTE)
+	@Override 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
 		
-		//usuario em memoria PARA TESTE
+		auth.userDetailsService(userDetailsService); 
+		
 		auth.inMemoryAuthentication()
 		.withUser("root")
 		.password(passwordEncoder().encode("root"))
-		.authorities("ROLE_USER");
+		.authorities("ROLE_USER");//Valida o usuario
 	}
 
-	//notação que deixa uma função acessível globalmente(em toda a minha aplicação)
+	//Notação que deixa uma função acessivel globalmente(em toda a minha aplicação)
 	@Bean 
-	public PasswordEncoder passwordEncoder() {
+	
+	//Criptografa a senha digitada
+	public PasswordEncoder passwordEncoder() { 
 		return new BCryptPasswordEncoder();
 	}
 	
+	//Teste
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
 		.antMatchers("/usuarios/logar").permitAll()
 		.antMatchers("/usuarios/cadastrar").permitAll()
-		.antMatchers(HttpMethod.OPTIONS).permitAll()// para saber quais opções de metodos tenha acessiveis para utilizar
+		.antMatchers(HttpMethod.OPTIONS).permitAll()
 		.anyRequest().authenticated()
 		.and().httpBasic()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,10 +1,10 @@
 package com.generation.blogpessoal.model;
 
-	//extensão para login
+//Extensão para login
 
-	public class UsuarioLogin {
+public class UsuarioLogin {
 	
-	private Long id;
+private Long id;
 	
 	private String nome;
 	
@@ -63,4 +63,7 @@ package com.generation.blogpessoal.model;
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+
+
 }
